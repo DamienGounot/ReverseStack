@@ -32,9 +32,13 @@ public class TextUI{
 
 	}
 
-	public static void main(String[] args) throws IOException{	
-		TextUI textui = new TextUI(args);
-
+	public static void main(String[] args) throws IOException{
+		try {
+			TextUI textui = new TextUI(args);
+		} catch (Exception e) {
+			System.out.println("[ERROR] Saisie des arguments obligatoire");
+		}	
+		
 
 	}
 
@@ -44,14 +48,15 @@ public class TextUI{
 
 			displayStack();
 			String cmd = getCommand();
-			runCommand(cmd);
+				runCommand(cmd);
 
-			if (local) {
+			
+
+			if (!local) {
 				try {
 					socket.close();
 					
 				} catch (Exception e) {
-					this.outputUser.println("Erreur fermeture");
 				}
 			}
 
@@ -64,9 +69,8 @@ public class TextUI{
 		String command="";
 		try {
 			command = inputUser.readLine();
-			outputUser.println("[DEBUG] Commande: "+command);
 		} catch (IOException e) {
-			e.printStackTrace();
+			outputUser.println("[ERROR] I/O Exception");
 		}
 
 		if(this.log){ // si Log
@@ -105,7 +109,7 @@ public class TextUI{
 				break;
 
 				default:
-					pile.operation(arg);
+					pile.operation(arg);	
 				break;
 			}
 		}
@@ -148,7 +152,7 @@ public class TextUI{
 		}
 	}
 
-	private void displayStack(){
+	public void displayStack(){
 		outputUser.println(this.pile);	
 	}
 
@@ -160,8 +164,9 @@ public class TextUI{
 			dimension = Integer.parseInt(saisie);
 		} catch (Exception e) {
 			dimension = 2; // si l'utilisateur se trompe dans la saisie de la dimension --> dimension 2 saisie par defaut.
+			outputUser.println("[ERROR]Dimension saisie invalide, la dimension est fixée à la dimension par défaut: "+ dimension);
 		}
-			outputUser.println("[DEBUG] Dimension: "+dimension);
+			outputUser.println("Dimension choisie: "+dimension);
 		
 		if(this.log){ // si Log
 			outputLog.println(dimension);
