@@ -75,9 +75,7 @@ public class Server extends Thread {
 		while (st.hasMoreTokens()) {
 			String arg = st.nextToken();
 			switch (arg) {
-				// faire case help
 				case "quit":
-					// fermeture de fichier et autre ici
 					loop = false;
 					break;
 				case "push":

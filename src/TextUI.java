@@ -48,17 +48,15 @@ public class TextUI{
 
 			displayStack();
 			String cmd = getCommand();
-				runCommand(cmd);
+			runCommand(cmd);
 
-			
-
-			if (!local) {
-				try {
-					socket.close();
-					
-				} catch (Exception e) {
-				}
 			}
+				if (!local) {
+					try {
+						socket.close();
+						
+					} catch (Exception e) {
+					}
 
 		}
 
@@ -152,7 +150,9 @@ public class TextUI{
 		}
 	}
 
-	public void displayStack(){
+	public
+	
+	void displayStack(){
 		outputUser.println(this.pile);	
 	}
 
