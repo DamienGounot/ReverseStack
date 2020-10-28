@@ -13,7 +13,7 @@ public class Server extends Thread {
 	private Socket socket;
 	private int id;
 	private static int CLIENT_MAX = 5;
-	private static PrintStream [] outputMulti = new PrintStream[CLIENT_MAX];
+	private static PrintStream [] outputUsers = new PrintStream[CLIENT_MAX];
 
 	public Server(Socket socket, int id) {
 		this.socket = socket;
@@ -34,7 +34,7 @@ public class Server extends Thread {
 		try {
 			inputUser = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			outputUser = new PrintStream(socket.getOutputStream());
-			outputMulti[id] = outputUser;
+			outputUsers[id] = outputUser;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -42,91 +42,105 @@ public class Server extends Thread {
 
 	}
 
-	public void displayStack() {
-		outputUser.println(pile);
+	public void displayStack(){
+		outputUser.println(pile);	
 	}
 
 	public void diffusionStack(){
-		for(int i = 0; i < CLIENT_MAX; i++ ){
+		for(int i = 0; i < CLIENT_MAX; i++ )
+		{
 			try{
-		outputMulti[i].println(pile);
+				outputUsers[i].println(pile);
 			}catch(Exception e){
 				continue;
 			}
 		}
 	}
-	public String getCommand() {
 
-		String cmd;
-
+	private String getCommand(){
+		outputUser.println("Entrez votre commande");
+		String command="";
 		try {
-			cmd = inputUser.readLine();
-			return cmd;
+			command = inputUser.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
-			return " Erreur IO Exception " + e;
+			outputUser.println("[ERROR] I/O Exception");
 		}
-
+		return command;
 	}
 
-	public void runCommand(String cmd) {
-		StringTokenizer st;
-		st = new StringTokenizer(cmd, " ");
-		while (st.hasMoreTokens()) {
+	private void runCommand(String command){
+		// on considère qu'un commande est : "operande obj1 obj2 " ? 
+		StringTokenizer st = new StringTokenizer(command, " ");
+
+		while(st.hasMoreTokens()){
 			String arg = st.nextToken();
+<<<<<<< Updated upstream
 			switch (arg) {
 				case "quit":
 					loop = false;
+=======
+
+			switch(arg){
+				case "quit":
+					this.loop = false;
+>>>>>>> Stashed changes
 					break;
 				case "push":
-					int array[] = new int[dimension];
-					try {
-						for (int i = 0; i < dimension; i++) {
-							array[i] = Integer.parseInt(st.nextToken());
-							;
-						}
-						ObjEmp value = new ObjEmp(array);
-						pile.push(value);
-					} catch (Exception E) {
-						outputUser.println("Erreur la taille de la pile a été dépassé : ");
-					}
-					break;
-				case "help":
-					outputUser.println(
-							"Commande utilisable sont les suivantes :\npush permet de rajouter des elements dans la pile\nquit permet de quitter le programme\n Permet de realiser les operations : add, sub, mul, div");
-					break;
-				default:
-					pile.operation(arg);
+						int[] vecteur = new int[this.dimension];
 
+						for (int i = 0; i < vecteur.length; i++) { // on connait la dimension, --> boucler sur les args pour remplir
+							arg = st.nextToken();
+							vecteur[i] = Integer.parseInt(arg);
+						}
+
+						ObjEmp objEmp = new ObjEmp(vecteur); // creation de l'objet empilable avec notre vecteur comme attribut
+						pile.push(objEmp);  // on push cet objEmp
+
+				break;
+
+				case "pop":
+						pile.pop();
+				break;
+
+				default:
+					pile.operation(arg);	
+				break;
 			}
 		}
+
+
 	}
 
-	public void mainLoop() {
+	private void mainLoop(){
 		displayStack();
-		while (loop) {
+		while(this.loop){
+			
 			String cmd = getCommand();
 			runCommand(cmd);
 			diffusionStack();
+
 		}
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+			try {
+				socket.close();
+				
+			} catch (Exception e) {
+			}
 	}
+
+
 
 	public static void main(String[] args) {
 		int port = 1234;
-		ServerSocket serv;
+		ServerSocket serveSocket;
 		Socket socket;
-		int id =0;
+		int id = 0;
 		try {
-			serv = new ServerSocket(port);
+			serveSocket = new ServerSocket(port);
 			while(id <= CLIENT_MAX){
-			System.out.println("waiting... ");
-			socket = serv.accept();
-			System.out.println("Connexion !!!");
+			System.out.println("waiting for user... ");
+			socket = serveSocket.accept();
+			System.out.println("new user !");
 			new Server(socket,id);
 			id++;
 			}
