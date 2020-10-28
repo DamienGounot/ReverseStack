@@ -24,7 +24,6 @@ public class Server extends Thread {
 	public void run() {
 		initRemote();
 		mainLoop();
-
 	}
 
 
@@ -74,16 +73,10 @@ public class Server extends Thread {
 
 		while(st.hasMoreTokens()){
 			String arg = st.nextToken();
-<<<<<<< Updated upstream
-			switch (arg) {
-				case "quit":
-					loop = false;
-=======
 
 			switch(arg){
 				case "quit":
 					this.loop = false;
->>>>>>> Stashed changes
 					break;
 				case "push":
 						int[] vecteur = new int[this.dimension];

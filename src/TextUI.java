@@ -49,25 +49,14 @@ public class TextUI{
 			displayStack();
 			String cmd = getCommand();
 			runCommand(cmd);
-
-<<<<<<< Updated upstream
-=======
+		}
 			if (!local) {
 				try {
 					socket.close();
 					
 				} catch (Exception e) {
 				}
->>>>>>> Stashed changes
 			}
-				if (!local) {
-					try {
-						socket.close();
-						
-					} catch (Exception e) {
-					}
-
-		}
 
 	}
 
