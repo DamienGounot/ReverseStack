@@ -49,16 +49,14 @@ public class TextUI{
 			displayStack();
 			String cmd = getCommand();
 			runCommand(cmd);
-
-			}
-				if (!local) {
-					try {
-						socket.close();
-						
-					} catch (Exception e) {
-					}
-
 		}
+			if (!local) {
+				try {
+					socket.close();
+					
+				} catch (Exception e) {
+				}
+			}
 
 	}
 
